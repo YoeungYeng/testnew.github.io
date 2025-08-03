@@ -2,8 +2,8 @@ name: Deploy Flutter Web to GitHub Pages
 
 on:
   push:
-    branches: ["master"] # Or "master" if you use that
-
+    branches:
+      - master  # Or 'master' if you use that branch
   workflow_dispatch:
 
 permissions:
@@ -16,34 +16,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0' # Update to your Flutter version
+          flutter-version: "3.19.0" # Or whatever version you're using
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: flutter pub get
 
       - name: Build Flutter Web
-        run: flutter build web --base-href="/your-repo-name/"
+        run: flutter build web --base-href="/testnew/" # 👈 Replace with your repo name
 
-      - name: Setup Pages
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload Build Output
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './build/web'
+          path: "build/web"
 
       - name: Deploy to GitHub Pages
         id: deployment
